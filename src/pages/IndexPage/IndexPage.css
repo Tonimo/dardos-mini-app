@@ -21,3 +21,11 @@
 .index-page__link-icon svg {
   display: block;
 }
+
+.selected {
+  border: 2px solid blue;
+}
+
+th {
+  border: 2px solid transparent;
+}
