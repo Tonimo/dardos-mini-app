@@ -19,11 +19,12 @@ export const IndexPage: Component = () => {
   });
 
   const [players, setPlayers] = createStore(players1);
-
   const [index, setIndex] = createSignal(0);
   const [dardos, setDardos] = createSignal(3);
+  const [overkill, setOverkill] = createSignal(false);
 
   function hit(num: number, times: number = 1) {
+    setOverkill(false);
     if (num != 0) {
       const hits = players[index()].hits.concat([]);
       hits[num] += times;
@@ -37,9 +38,10 @@ export const IndexPage: Component = () => {
           const teamA =
             players[index()].score + players[(index() + 2) % 4].score;
           const teamB =
-            players[index() + (1 % 4)].score + players[(index() + 3) % 4].score;
+            players[(index() + 1) % 4].score + players[(index() + 3) % 4].score;
           if (teamA - teamB >= 100) {
             console.log('overkill 100');
+            setOverkill(true);
           } else {
             setPlayers(
               index(),
@@ -53,7 +55,7 @@ export const IndexPage: Component = () => {
 
       setPlayers(index(), { hits });
     }
-    console.log(players);
+    //console.log(players);
 
     setDardos(dardos() - 1);
     if (dardos() == 0) {
@@ -153,7 +155,9 @@ export const IndexPage: Component = () => {
           return <button onClick={() => hit(number, 3)}>{'T' + number}</button>;
         }}
       </For>
-      <p>Dardos: {dardos()}</p>
+      <p>
+        Dardos: {dardos()} {overkill() ? 'Overkill' : ''}
+      </p>
     </Page>
   );
 };
