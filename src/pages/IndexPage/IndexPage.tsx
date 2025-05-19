@@ -7,7 +7,7 @@ import { createStore } from 'solid-js/store';
 
 export const IndexPage: Component = () => {
   const players1: { name: string; hits: number[]; score: number }[] = [];
-  ['Antu', 'Noé', 'Puchy', 'Nico'].forEach((name) => {
+  ['J1', 'J3', 'J2', 'J4'].forEach((name) => {
     players1.push({
       name,
       hits: [
@@ -107,11 +107,11 @@ export const IndexPage: Component = () => {
               return (
                 <tr>
                   <td></td>
-                  <td>{getSymbol(players[0].hits[number])}</td>
-                  <td>{getSymbol(players[2].hits[number])}</td>
+                  <td innerHTML={getSymbol(players[0].hits[number])}></td>
+                  <td innerHTML={getSymbol(players[2].hits[number])}></td>
                   <td>{number == 25 ? 'Bull' : number}</td>
-                  <td>{getSymbol(players[1].hits[number])}</td>
-                  <td>{getSymbol(players[3].hits[number])}</td>
+                  <td innerHTML={getSymbol(players[1].hits[number])}></td>
+                  <td innerHTML={getSymbol(players[3].hits[number])}></td>{' '}
                 </tr>
               );
             }}
@@ -162,5 +162,5 @@ export const IndexPage: Component = () => {
   );
 };
 function getSymbol(number: number) {
-  return number == 1 ? '/' : number == 2 ? 'X' : number == 3 ? '%' : '';
+  return number == 1 ? '/' : number == 2 ? 'x' : number == 3 ? '&#9746;' : '';
 }
