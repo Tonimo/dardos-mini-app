@@ -7,7 +7,7 @@ import { createStore } from 'solid-js/store';
 
 export const IndexPage: Component = () => {
   const players1: { name: string; hits: number[]; score: number }[] = [];
-  ['J1', 'J3', 'J2', 'J4'].forEach((name) => {
+  ['Jug1', 'Jug2', 'Jug3', 'Jug4'].forEach((name) => {
     players1.push({
       name,
       hits: [
@@ -22,6 +22,8 @@ export const IndexPage: Component = () => {
   const [index, setIndex] = createSignal(0);
   const [dardos, setDardos] = createSignal(3);
   const [overkill, setOverkill] = createSignal(false);
+  const [ronda, setRonda] = createSignal(1);
+  const [ganador, setGanador] = createSignal(0);
 
   function hit(num: number, times: number = 1) {
     setOverkill(false);
@@ -39,8 +41,9 @@ export const IndexPage: Component = () => {
             players[index()].score + players[(index() + 2) % 4].score;
           const teamB =
             players[(index() + 1) % 4].score + players[(index() + 3) % 4].score;
+
           if (teamA - teamB >= 100) {
-            console.log('overkill 100');
+            //console.log('overkill 100');
             setOverkill(true);
           } else {
             setPlayers(
@@ -53,14 +56,38 @@ export const IndexPage: Component = () => {
         hits[num] = 3;
       }
 
+      const teamA =
+        players[index()].score + players[(index() + 2) % 4].score;
+      const teamB =
+        players[(index() + 1) % 4].score + players[(index() + 3) % 4].score;
+
+      if (teamA >= teamB) {
+        const hitsPartner = players[(index() + 2) % 4].hits.concat([]);
+
+        if ((hits[20] == 3 && hits[19] == 3 && hits[18] == 3
+          && hits[17] == 3 && hits[16] == 3 && hits[15] == 3
+          && hits[20] == 3 && hits[25] == 3) || (hitsPartner[20] == 3
+            && hitsPartner[19] == 3 && hitsPartner[18] == 3
+            && hitsPartner[17] == 3 && hitsPartner[16] == 3
+            && hitsPartner[15] == 3
+            && hitsPartner[20] == 3 && hitsPartner[25] == 3)
+        ) {
+          setGanador(index() + 1)
+        }
+      }
+
       setPlayers(index(), { hits });
     }
     //console.log(players);
 
     setDardos(dardos() - 1);
     if (dardos() == 0) {
+      setOverkill(false);
       setIndex((index() + 1) % 4);
       setDardos(3);
+      if (index() % 4 == 0) {
+        setRonda((prev => prev + 1))
+      }
     }
   }
 
@@ -97,8 +124,9 @@ export const IndexPage: Component = () => {
             <th class={index() == 0 ? 'selected' : ''}>{players[0].name}</th>
             <th class={index() == 2 ? 'selected' : ''}>{players[2].name}</th>
             <th>-</th>
-            <th class={index() == 1 ? 'selected' : ''}>{players[1].name}</th>
-            <th class={index() == 3 ? 'selected' : ''}>{players[3].name}</th>
+            <th class={index() == 1 ? 'selected2' : ''}>{players[1].name}</th>
+            <th class={index() == 3 ? 'selected2' : ''}>{players[3].name}</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -107,44 +135,59 @@ export const IndexPage: Component = () => {
               return (
                 <tr>
                   <td></td>
-                  <td innerHTML={getSymbol(players[0].hits[number])}></td>
-                  <td innerHTML={getSymbol(players[2].hits[number])}></td>
-                  <td>{number == 25 ? 'Bull' : number}</td>
-                  <td innerHTML={getSymbol(players[1].hits[number])}></td>
-                  <td innerHTML={getSymbol(players[3].hits[number])}></td>{' '}
+                  <td class={index() == 0 ? 'selected' : ''} innerHTML={getSymbol(players[0].hits[number])}></td>
+                  <td class={index() == 2 ? 'selected' : ''} innerHTML={getSymbol(players[2].hits[number])}></td>
+                  <td>{number == 25 ? 'Centro' : number}</td>
+                  <td class={index() == 1 ? 'selected2' : ''} innerHTML={getSymbol(players[1].hits[number])}></td>
+                  <td class={index() == 3 ? 'selected2' : ''} innerHTML={getSymbol(players[3].hits[number])}></td>
+                  <td></td>
                 </tr>
               );
             }}
           </For>
           <tr>
+            <td>Total</td>
+            <td class={index() == 0 ? 'selected' : ''}></td>
+            <td class={index() == 2 ? 'selected' : ''}></td>
+            <td></td>
+            <td class={index() == 1 ? 'selected2' : ''}></td>
+            <td class={index() == 3 ? 'selected2' : ''}></td>
+            <td>Total</td>
+          </tr>
+          <tr class='last'>
             <td>{players[0].score + players[2].score}</td>
-            <td>{players[0].score}</td>
-            <td>{players[2].score}</td>
-            <td>Score</td>
-            <td>{players[1].score}</td>
-            <td>{players[3].score}</td>
+            <td class={index() == 0 ? 'selected' : ''}>{players[0].score}</td>
+            <td class={index() == 2 ? 'selected' : ''}>{players[2].score}</td>
+            <td>Puntos</td>
+            <td class={index() == 1 ? 'selected2' : ''}>{players[1].score}</td>
+            <td class={index() == 3 ? 'selected2' : ''}>{players[3].score}</td>
             <td>{players[1].score + players[3].score}</td>
           </tr>
         </tbody>
       </table>
 
-      <button onClick={() => hit(0)}>Miss</button>
+      <button class='red' style="width:100px" onClick={() => hit(0)}>Fallo</button>
+      <button style="width:100px" onClick={() => hit(25)}>
+        {'Centro'}
+      </button><button style="width:100px" onClick={() => hit(25, 2)}>
+        {'DCentro'}
+      </button>
       <br></br>
-      <For each={[20, 19, 18, 17, 16, 15, 25]}>
+      <For each={[20, 19, 18, 17, 16, 15]}>
         {(number) => {
           return (
             <button onClick={() => hit(number)}>
-              {number == 25 ? 'Bull' : number}
+              {number}
             </button>
           );
         }}
       </For>
       <br></br>
-      <For each={[20, 19, 18, 17, 16, 15, 25]}>
+      <For each={[20, 19, 18, 17, 16, 15]}>
         {(number) => {
           return (
             <button onClick={() => hit(number, 2)}>
-              {number == 25 ? 'DBull' : 'D' + number}
+              {'D' + number}
             </button>
           );
         }}
@@ -158,9 +201,16 @@ export const IndexPage: Component = () => {
       <p>
         Dardos: {dardos()} {overkill() ? 'Overkill' : ''}
       </p>
+      <p>
+        Ronda: {ronda()}
+      </p>
+      {ganador() != 0 && <p>
+        Ganador: Jug{ganador()} y Jug{(ganador() + 1) % 4 + 1}
+      </p>}
     </Page>
   );
 };
+
 function getSymbol(number: number) {
   return number == 1 ? '/' : number == 2 ? 'x' : number == 3 ? '&#9746;' : '';
 }
