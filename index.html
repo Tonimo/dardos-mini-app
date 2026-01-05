@@ -3,16 +3,41 @@
 
 <head>
   <meta charset="utf-8" />
+  <link rel="icon" href="./favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
-  <title>Dardos - Liga Equipos</title>
-  <script type="module" crossorigin src="/dardos-mini-app/assets/index-C5atv64u.js"></script>
-  <link rel="stylesheet" crossorigin href="/dardos-mini-app/assets/index-B-fl8IWb.css">
+  
+		<link rel="modulepreload" href="./_app/immutable/entry/start.CjEF2m6q.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/r9eTGLnO.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/BotN5TbW.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/CI3Stzie.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/D1m4ef0o.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.hkvVB0XL.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/DsnmJJEf.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/BxiL6Ave.js">
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
+  <div id="app"></div>
+  <div style="display: contents">
+			<script>
+				{
+					__sveltekit_1yypdh7 = {
+						base: new URL(".", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./_app/immutable/entry/start.CjEF2m6q.js"),
+						import("./_app/immutable/entry/app.hkvVB0XL.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
+				}
+			</script>
+		</div>
 </body>
 
 </html>
